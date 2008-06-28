@@ -1,0 +1,48 @@
+--- RoboCupGameControllerStub.cc	Wed Feb 12 11:47:36 2003
++++ RoboCupGameControllerStub.cc.new	Wed Feb 12 11:47:46 2003
+@@ -14,6 +14,7 @@
+ #include <stdio.h> // for perror
+ #include <iostream>
+ #include <MCOOP.h>
++#include <gtk/gtk.h>
+ #include "entry.h"
+ #include "RoboCupGameController.h"
+ using namespace std;
+@@ -25,12 +26,12 @@
+ RoboCupGameController* pSelf;
+ 
+ 
+-int
+-check_message_queue()
++gint
++check_message_queue(gpointer)
+ {
+     RoboCupGameController& Self = *pSelf;
+ 
+-    if ( msgrcv(msqid, (msgbuf*)&currentMsg, currentMsg.Size(), msgType, 0) > 0 ) {
++    if ( msgrcv(msqid, (msgbuf*)&currentMsg, currentMsg.Size(), msgType, IPC_NOWAIT) > 0 ) {
+         void* pMsg = &currentMsg.data;
+ 
+         // Stub Function
+@@ -194,6 +195,10 @@
+ int
+ main(int argc, char* argv[])
+ {
++    // GTK+ setting
++    gtk_set_locale();
++    gtk_init(&argc, &argv);
++
+     strcpy(myname, argv[0]);
+     SetRegistryManagerKey(argv[1]);
+ 
+@@ -220,8 +225,8 @@
+     pSelf = new RoboCupGameController();
+ 
+     // Main Routine
+-    while (check_message_queue())
+-        ;
++    gtk_timeout_add(30, check_message_queue, NULL);
++    gtk_main();
+ 
+     return 0;
+ }

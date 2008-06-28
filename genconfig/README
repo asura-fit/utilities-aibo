@@ -1,0 +1,107 @@
+設定ファイル生成ツールについて
+
+○ 対象とするファイル
+  1. AUTOEXEC.SCM
+  2. WLANCONF.TXT
+  3. AiboProxy 用の HOSTGW.CFG
+  4. AiboHUB 用の HOSTGW.CFG
+  5. AiboHUB 用の CONNECT.CFG
+
+○ 使い方
+  java ConfigurationGenerator [オプション...]
+
+  オプションの部分は生成するファイルにより異なります。
+  (正直、別なプログラムにすれば良かったかも)
+  -t, -o などのオプションはどこに入っていてもかまいません。
+  (-t, -o などの解析して取り除いてから、設定ファイル名の取り出しなどの処理
+  を実行する形になっているので)
+
+  1. AUTOEXEC.SCM の生成
+    % java ConfigurationGenerator 設定ファイル名 AUTOEXEC チームカラー 役割
+    
+    例) 設定ファイル sample.cnf で、blue-libero を作る場合
+      % java ConfigurationGenerator sample.cnf AUTOEXEC blue Libero
+
+    利用可能なオプション
+      -t template    AUTOEXEC.SCM を生成する際のテンプレートとして
+                     用いるファイル名を指定します。
+                     デフォルトではカレントディレクトリにある
+                     AUTOEXEC.SCM.templ を利用します。
+      -o output      生成する AUTOEXEC.SCM のファイル名を指定します。
+                     例えば、blue-libero 用の AUTOEXEC.SCM を
+                     blue-libero/AUTOEXEC.SCM に生成したければ
+                     -o blue-libero/AUTOEXEC.SCM と指定します。
+
+  2. WLANCONF.TXT の生成
+    % java ConfigurationGenerator 設定ファイル WLANCONF 役割
+
+    例) 設定ファイル sample.cnf で、blue-libero 用の WLANCONF.TXT を生成
+      % java ConfigurationGenerator sample.cnf WLANCONF Libero
+
+    利用可能なオプション
+      -t template    WLANCONF.TXT を生成する際にテンプレートとして
+                     用いるファイル名を指定します。
+                     デフォルトではカレントディレクトリにある
+                     WLANCONF.TXT.templ を利用します。
+      -o output      生成する WLANCONF.TXT のファイル名を指定します。
+                     例えば blue-libero 用の WLANCONF.TXT を
+                     blue-libero/WLANCONF.TXT に生成する場合は
+                     -o blue-libero/WLANCONF.TXT と指定します。
+
+  3. AiboProxy 用の HOSTGW.CFG の生成
+    % java ConfigurationGenerator 設定ファイル AIMON 役割
+
+    例) 設定ファイル sample.cnf で、blue-libero 用の HOSTGW.CFG を生成
+      % java ConfigurationGenerator sample.cnf AIMON Libero
+
+    利用可能なオプション
+      -t template    HOSTGW.CFG を生成する際にテンプレートとして
+                     用いるファイル名を指定します。
+                     デフォルトではカレントディレクトリにある
+                     HOSTGW.CFG.templ を利用します。
+      -o output      生成する HOSTGW.CFG のファイル名を指定します。
+                     例えば blue-libero 用の HOSTGW.CFG を
+                     blue-libero/HOSTGW.CFG に生成する場合は
+                     -o blue-libero/HOSTGW.CFG と指定します。
+
+  4. AiboHUB 用の HOSTGW.CFG の生成
+    % java ConfigurationGenerator 設定ファイル HUB_HOSTGW 役割...
+
+    例) 設定ファイル sample.cnf で libero, goalie, striker で情報共有する場合
+      % java ConfigurationGenerator sample.cnf HUB_HOSTGWW Libero Goalie Striker
+
+    利用可能なオプション
+      -o output     生成する HOSTGW.CFG のファイル名を指定します。
+
+  5. AiboHUB 用の CONNECT.CFG の生成
+    % java ConfigurationGenerator 設定ファイル HUB_CONNECT 役割...
+
+    例) 設定ファイル sample.cnf で libero, goalie, striker で情報共有する場合
+      % java ConfigurationGenerator sample.cnf HUB_CONNECT Libero Goalie Striker
+
+    利用可能なオプション
+      -o output     生成する CONNECT.CFG のファイル名を指定します。
+
+○ どんな動作をするのか
+  基本的にはテンプレートから ${keyword} の形で記述されている部分を
+  keyword に応じて、設定ファイルで指定されている内容に置換します。
+  例えば、設定ファイルで WhiteBalance = FL と記述されている場合に、
+  ${WhiteBalance} は FL へ置換されます。
+  この置換のルールは、生成するファイル毎に異なります。
+
+  ただし、AiboHUB の場合の動作は特殊で、テンプレートを用いるのではなく、
+  すべての記述を ConfigurationGenerator が生成します。
+
+  テンプレートファイルに関しては、samples ディレクトリに、サンプルを
+  置いてありますので、そちらを参考にしてください。
+
+○ TODO
+  1. エラー処理を手抜き(というか、ほとんどやっていない)しているので、
+     記述ミスがあると問題が起きる (最優先事項: JapanOpen までには修正します)
+  2. jar ファイルにまとめる
+  3. Makefile に統合
+     理想を言うと make full-install で、４体分のメモリスティックを
+     生成できるようにしたい。
+  4. 機体ごとの設定が必要ならば、それをサポート
+  5. 効率が悪い (設定ファイルごとに JVM を起動する必要があるし...)
+  6. 使いやすさ (make に統合する時は、あまり関係ないと思われるが...)

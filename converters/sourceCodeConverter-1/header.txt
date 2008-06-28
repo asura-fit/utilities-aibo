@@ -1,0 +1,1 @@
+/* -*- mode:c++;c-file-style:"asura2005";buffer-file-coding-system:utf-8-unix -*- */

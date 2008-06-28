@@ -1,0 +1,37 @@
+・説明
+
+このプログラムは、
+Log::info(LOG_DEFAULT, "format %s %d", "logconv", 1);
+のようなログ出力を
+LOG_INFO(LOG_DEFAULT, "format %s %d", << "logconv" << 1);
+に変換するプログラムです。
+svn://svn.asura.ac/repositories/asura/branches/refactoring/najima-2005-2
+の -r 327:328で使用しました。
+
+しかし、その後、
+LOG_INFO(LOG_DEFAULT, "format %s %d", , "logconv", 1);
+のようなコードに変換されたため、このプログラムを単体で使用することはないでしょう。
+
+・コンパイル
+> make
+だけでコンパイル＆リンクされ、logconv1という実行可能形式ファイルが生成されます
+
+・使い方
+./logconv1 < 変換したいファイル > 変換先のファイル
+のように使います。
+
+for file in `find 抽出条件`; do \
+	echo convert $file; \
+	mv $file $file.tmp; \
+	path/to/logconv1 < $file.tmp $file; \
+	rm $file.tmp; \
+done
+
+のようにすることで一括変換が可能です。
+
+・バグ
+logconv1はある程度C++の文法を解釈し、Log:xxxの部分を捜し出してログを変換しますが、
+完全ではありません。
+そのため、数箇所で変換結果がおかしくなります。
+必ずコンパイルしておかしな点を修正して下さい。
+また、diffをとって、変換が意図したとおりに確実に行なわれているか確認して下さい。

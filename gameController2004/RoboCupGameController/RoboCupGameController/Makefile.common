@@ -1,0 +1,36 @@
+#
+# Copyright 2003 Sony Corporation
+#
+# Permission to use, copy, modify, and redistribute this software is
+# hereby granted.
+#
+# This software is provided "as is" without warranty of any kind,
+# either expressed or implied, including but not limited to the
+# implied warranties of fitness for a particular purpose.
+#
+
+# NOTE: This makefile is included by the makefiles in the
+#       subdirectories.
+
+.PHONY: all install clean
+
+all: roboCupGameController.bin
+
+%.o: %.cc
+	$(CXX) $(CXXFLAGS) -o $@ -c $^
+
+RoboCupGameControllerStub.cc: stub.cfg
+	$(STUBGEN) $^
+	patch < stub.patch
+
+roboCupGameController.bin: RoboCupGameControllerStub.o RoboCupGameController.o GUI.o Penalty.o ../../libTeamInfo/src/TeamInfo.o $(OCF)
+	$(MKBIN) $(MKBINFLAGS) -o $@ $^ $(LIBS)
+	$(STRIP) $@
+
+install: roboCupGameController.bin
+	$(CP) $^ $(INSTALLDIR)/OPEN-R/MW/OBJS/RGC.BIN
+
+clean:
+	rm -f *.o *.bin *.elf *.snap.cc
+	rm -f RoboCupGameControllerStub.h RoboCupGameControllerStub.cc def.h entry.h
+	rm -f $(INSTALLDIR)/OPEN-R/MW/OBJS/RGC.BIN

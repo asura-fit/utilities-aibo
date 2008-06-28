@@ -1,0 +1,6 @@
+;-----PosePlayer(Grub_Ball)-----
+;MOT_GRUB_BALL TYPE_POSE_PLAYER
+(pwalk-registmotion 45 0 #(
+#(-34 0 0  64 -65 40 64 -65 40  -1 57 147 -2 58 147  -66 -0 )
+	) #(8) 0)
+;腕でボールを捕まえるモーション

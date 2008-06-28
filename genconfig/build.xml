@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="genconfig_java" default="" basedir=".">
+  <property name="src.dir" value="./src"/>  
+  <property name="dest.dir" value="./build"/>
+  <property name="jar.dir" value="./jar"/>
+  <property name="jar.file" value="genconfig.jar"/>
+  <property name="jar.mainclass" value="ConfigurationGenerator"/>
+
+  <target name="build">
+    <mkdir dir="${dest.dir}" />
+    <javac destdir="${dest.dir}" srcdir="${src.dir}" encoding="JISAutoDetect"/>
+  </target>
+  
+  <target name="jar" depends="build">
+    <jar basedir="${dest.dir}" jarfile="${jar.file}" compress="true">
+      <manifest>
+        <attribute name="Main-Class" value="${jar.mainclass}"/>
+<!--        <attribute name="Class-Path" value="${dest.dir}"/> -->
+      </manifest>
+    </jar>
+  </target>
+</project>
+  

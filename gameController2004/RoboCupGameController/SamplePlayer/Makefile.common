@@ -1,0 +1,35 @@
+#
+# Copyright 2002,2003 Sony Corporation
+#
+# Permission to use, copy, modify, and redistribute this software is
+# hereby granted.
+#
+# This software is provided "as is" without warranty of any kind,
+# either expressed or implied, including but not limited to the
+# implied warranties of fitness for a particular purpose.
+#
+
+# NOTE: This makefile is included by the makefiles in the
+#       subdirectories.
+
+.PHONY: all install clean
+
+all: samplePlayer.bin
+
+%.o: %.cc
+	$(CXX) $(CXXFLAGS) -o $@ -c $^
+
+SamplePlayerStub.cc: stub.cfg
+	$(STUBGEN) $^
+
+samplePlayer.bin: SamplePlayerStub.o SamplePlayer.o $(OCF)
+	$(MKBIN) $(MKBINFLAGS) -o $@ $^ $(LIBS)
+	$(STRIP) $@
+
+install: samplePlayer.bin
+	$(CP) $^ $(INSTALLDIR)/OPEN-R/MW/OBJS/PLAYER.BIN
+
+clean:
+	rm -f *.o *.bin *.elf *.snap.cc
+	rm -f SamplePlayerStub.h SamplePlayerStub.cc def.h entry.h
+	rm -f $(INSTALLDIR)/OPEN-R/MW/OBJS/PLAYER.BIN

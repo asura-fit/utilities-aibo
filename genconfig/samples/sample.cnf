@@ -1,0 +1,47 @@
+# AUTOEXEC.SCM, HOSTGW.CNF などの設定ファイルを生成する
+# ための設定ファイル
+
+# "#" から始まる行はコメントとして処理される
+
+# 無線 LAN に関する設定 (WLANCONF.TXT と AUTOEXEC.SCM の一部に利用)
+Network		= 131.206.93.0
+NetMask		= 255.255.255.0
+ESSID		= ASURA
+WEPENABLE	= 1
+WEPKEY		= aibo0
+APMODE		= 1
+CHANNEL		= 9
+
+# カメラパラメタ
+# ホワイトバランス (FL, OUTDOOR, INDOOR から選択)
+WhiteBalance	= FL
+# ゲイン (LOW, MID, HIGH から選択)
+Gain		= MID
+# シャッタースピード (SLOW, MID, FAST から選択)
+ShutterSpeed	= MID
+
+# GCD を切り替える時の effective tilt 角を指定(下が＋です。注意！)
+GCDThreshold	= 30
+
+# 役割と IP アドレスのマッピング(下のコメントにある通り、変更される可能性あり)
+Striker		= 60
+Libero		= 61
+Defender	= 62
+Goalie		= 63
+
+# 写真を送るフレーム間隔
+PhotoInterval   = 0
+
+# 機体ごとの設定ってどうしよう？
+# たとえば、 striker に関しては monitor を ON にしておきたいとか...
+# 可読性を保証した上でのパターンとしては
+# Striker {
+#	Monitor = true
+#	InfoLog = false
+#	IP	= 60
+#	DebugLog= false
+# }
+# という感じの記述を用意するはずなんだけど、
+# この形にするとパーザを書くのが面倒。
+#
+# ということで、希望があれば善処します。

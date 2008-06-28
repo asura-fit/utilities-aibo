@@ -1,0 +1,162 @@
+; ---- user-ja DON'T MODIFY THIS LINE!
+;
+; $Log: dot-emacs,v $
+; Revision 1.1  2003/06/05 18:59:51  ken
+; update: Fontset mode included, gnu style as a C mode style default setting
+; 	remove obsoleted files
+;
+; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 日本語表示の設定
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (not (boundp 'MULE))
+    (if (featurep 'xemacs)
+        ; xemacs20 / xemacs21 の場合
+	(progn
+	  (set-language-environment "Japanese")
+	  (set-default-buffer-file-coding-system 'sjis-unix)
+	  (set-keyboard-coding-system 'sjis-unix)
+	  (if (not window-system) (set-terminal-coding-system 'sjis-unix))
+        )
+        ; emacs20 の場合
+        (progn
+	  (set-language-environment "Japanese")
+	  (set-default-coding-systems 'sjis-unix)
+	  (set-keyboard-coding-system 'sjis-unix)
+	  (if (not window-system) (set-terminal-coding-system 'sjis-unix))
+        )
+    )
+)
+; 日本語 info が文字化けしないように
+(auto-compression-mode t)
+; xemacs の shell-mode で 日本語 EUC が使えるようにする
+(add-hook 'shell-mode-hook (function
+   (lambda () (set-buffer-process-coding-system 'euc-japan 'euc-japan))))
+; 日本語 grep
+(if (file-exists-p "/usr/bin/jgrep")
+    (setq grep-command "jgrep -n -e ")
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Xでのカラー表示
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'font-lock)
+(if (not (featurep 'xemacs))
+    (global-font-lock-mode t)
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; C プログラムの書式
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;(defun my-c-mode-common-hook ()
+;   (c-set-style "linux") (setq indent-tabs-mode t) ;linux 式がいいとき
+;      /usr/src/linux/Documentation/CodingStyle 参照
+;   (c-set-style "k&r") ;k&r式がいいときはこれを有効にする
+;   (c-set-style "gnu") ;デフォルトの設定
+; )
+;(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; いろいろ
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Deleteキーでカーソル位置の文字が消えるようにする
+(global-set-key [delete] 'delete-char)
+;; C-h キーでカーソルの左の文字が消えるようにする。
+;; ただし、もともと C-h はヘルプなので、
+;; これを有効にすると、ヘルプを使うときには
+;; M-x help や F1 を使う必要があります。
+;(global-set-key "\C-h" 'backward-delete-char)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 漢字変換 (canna) の設定
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(if (featurep 'xemacs)
+    ; xemacs20, xemacs21
+    (progn
+      (load-library "canna")
+      (setq canna-use-color t)
+      (canna)
+      (global-set-key "\C-o" 'canna-toggle-japanese-mode)
+      (select-input-method "japanese-canna")
+      (toggle-input-method nil)
+;     ; yc を使うときは、次の行を有効にしてください。
+;     (load "yc")
+    )
+    (if (boundp 'MULE)
+        ; mule2
+        (progn
+          (load-library "canna")
+          (setq canna-use-color t)
+          (canna)
+          (global-set-key "\C-o" 'canna-toggle-japanese-mode)
+          (global-set-key "\C-\\" 'canna-toggle-japanese-mode)
+        )
+        (if (fboundp 'dynamic-call)
+            ; emacs20-dl
+            (progn
+              (load-library "canna")
+              (setq canna-use-color t)
+              (canna)
+              (global-set-key "\C-o" 'canna-toggle-japanese-mode)
+              (set-input-method "japanese-canna")
+            )
+            ; emacs20
+            (load "yc")
+        )
+    )
+)
+; ---- user-ja end DON'T MODIFY THIS LINE!
+(custom-set-variables
+ '(load-home-init-file t t)
+ '(gnuserv-program (concat exec-directory "/gnuserv")))
+(custom-set-faces)
+
+;
+; フォントセットの設定
+;
+(create-fontset-from-fontset-spec
+	"-*-fixed-medium-r-normal--14-*-*-*-*-*-fontset-14,
+	ascii:-*-fixed-medium-r-normal--14-*-iso8859-1,
+	japanese-jisx0208:-misc-fixed-medium-r-normal--14-*-jisx0208*,
+	katakana-jisx0201:-misc-fixed-medium-r-normal--14-*-jisx0201*")
+
+; bold-r-normal
+(create-fontset-from-fontset-spec
+	"-*-fixed-bold-r-normal--14-*-*-*-*-*-fontset-14,
+	ascii:-*-*-bold-r-normal--14-*-*-iso8859-1,
+	japanese-jisx0208:-misc-fixed-medium-r-normal--14-*-jisx0208*,
+	katakana-jisx0201:-misc-fixed-medium-r-normal--14-*-jisx0201*")
+;
+
+(setq default-frame-alist
+      (cons '(font . "fontset-14") default-frame-alist))
+
+;
+; C言語スタイルの設定
+;
+(setq c-site-default-style "gnu")
+
+
+; linux-work, stdIn.pipe, asura-scm.el などがあるディレクトリを
+; 指定してください。
+(setq asura-scm-path "~/asura/src/Asura-work/linux-work")
+
+; asura-scm-path から asura-scm.el をロードするための設定
+(setq load-path (cons (expand-file-name asura-scm-path)
+		      load-path))
+(load "asura-scm")
+
+;; 拡張子が .scm だったら ASURA Scheme モードにする
+(setq auto-mode-alist
+      (cons '("\\.scm$" . asura-scm-mode)
+	    auto-mode-alist))
+
+;; 拡張子が .scm だったら ASURA Scheme モードにする
+(setq auto-mode-alist
+      (cons '("\\.SCM$" . asura-scm-mode)
+	    auto-mode-alist))
+
+(setq asura-scm-mode-hook
+      '(lambda ()
+	 (font-lock-mode t)))
+

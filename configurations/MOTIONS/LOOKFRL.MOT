@@ -1,0 +1,6 @@
+;-----PosePlayer(MOT_LOOK_FRONT_RIGHT_LEG)-----
+;MOT_LOOK_RIGHT_LEG TYPE_POSE_PLAYER 
+(pwalk-registmotion 61 0 #(
+#(-20 -34 -19  87 -7 5 15 11 106  -65 -15 100 -25 -10 30  0 0)
+) #(35) 0)
+;バリアブルライティング用の右腕を見る動作

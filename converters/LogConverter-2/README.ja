@@ -1,0 +1,42 @@
+・説明
+
+このプログラムは、
+LOG_INFO(LOG_DEFAULT, "format %s %d", << "logconv" << 2);
+のようなログ出力を
+LOG_INFO(LOG_DEFAULT, "format %s %d", , "logconv" , 2);
+に変換するプログラムです。
+svn://svn.asura.ac/repositories/asura/branches/refactoring/najima-2005-2
+の -r 337:338で使用しました。
+
+従来のコードを変換するには、logconv1(LogConverter-1)を実行した後、このプログラムを実行数する必要があります。
+
+・コンパイル
+> make
+だけでコンパイル＆リンクされ、logconv2という実行可能形式ファイルが生成されます
+
+・使い方
+./logconv2 < 変換したいファイル > 変換先のファイル
+のように使います。
+
+for file in `find 抽出条件`; do \
+	echo convert $file; \
+	mv $file $file.tmp; \
+	path/to/logconv2 < $file.tmp $file; \
+	rm $file.tmp; \
+done
+
+のようにすることで一括変換が可能です。
+
+従来のログのコードから一気に変換するには、
+for file in `find 抽出条件`; do \
+	echo convert $file; \
+	mv $file $file.tmp; \
+	path/to/logconv1 < $file.tmp | path/to/logconv2 > $file; \
+	rm $file.tmp; \
+done
+とする必要があります。
+
+・バグ
+logconv1のようなバグはありませんが、一括変換を書けた場合は、
+logconv1のバグにひきずられてしまう可能性があります。
+必ず、コンパイルとdiffによるチェックを行なって下さい。

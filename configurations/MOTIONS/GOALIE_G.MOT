@@ -1,0 +1,7 @@
+;-----GoaliePlayer(Goalie_guard)-----
+;MOT_GOALIE_GUARD TYPE_GOALIE_PLAYER 
+(pwalk-registmotion 65 0 #(
+#(30 0 20 30 80 40 30 80 40 0 10 120 0 10 120 0 0)
+#(30 0 20 80 0 60 80 0 60 -20 10 120 -20 10 120 0 0)
+)
+#(30 5) 0)

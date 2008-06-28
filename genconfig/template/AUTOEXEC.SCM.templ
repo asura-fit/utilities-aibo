@@ -1,0 +1,141 @@
+; Banner
+(display "Welcome to the ASURA distributed environment")
+(newline)
+
+(init-as ${ROLE})
+
+; set target goal
+; BLUE
+;(set-target-goal "BLUE")
+; YELLOW
+; (set-target-goal "YELLOW")
+
+(set-target-goal "${TargetGoal}")
+
+; give a name
+(givename "${Name}")
+(giveid ${ID})
+
+; 
+; If you like to start up the aibo for pwalk testing mode,
+; set dispatch enabled and scheduler disabled.
+; The following code is for attacker's configuration.
+;
+; disable scheme dispatch
+(set! is-dispatch-enabled #f)
+; enable C++ scheduler
+(set! is-scheduler-enabled #t)
+
+;
+;
+; pause to pause and restart the scheduler
+;
+(define pause (lambda ()
+        (set! is-scheduler-enabled
+                (not is-scheduler-enabled))))
+
+
+; /////////////////////////////////////////////////////
+; Set appropriate camera settings
+; /////////////////////////////////////////////////////
+; set white balance. "INDOOR","OUTDOOR" and "FL" are available.
+(camera-white-balance "${WhiteBalance}")
+; set camera gain. "LOW", "MID" and "HIGH" are available. 
+(camera-gain  "${Gain}")
+; set shutter speed. "SLOW", "MID" and "FAST" are available.
+(camera-shutter-speed "${ShutterSpeed}")
+
+; /////////////////////////////////////////////////////
+; GCD change tilt threshold
+; /////////////////////////////////////////////////////
+(set! gcd-tilt-threshold ${GCDThreshold})
+
+; /////////////////////////////////////////////////////
+; visual cortex distance calibration
+; /////////////////////////////////////////////////////
+(vc-set-beacondist-calib ${VCBeaconDistCalib})
+(vc-set-goaldist-calib ${VCGoalDistCalib1} ${VCGoalDistCalib2})
+(vc-set-balldist-calib ${VCBallDistCalib1} ${VCBallDistCalib2})
+(vc-set-tiltoffset-calib #f ${VCTiltOffsetCalib})
+
+; /////////////////////////////////////////////////////
+; visual cortex options
+; /////////////////////////////////////////////////////
+(vc-set-lines-and-walls-detection #f #f)
+
+; /////////////////////////////////////////////////////
+; visual cortex sanities
+; /////////////////////////////////////////////////////
+(vc-set-sanity-bluegoal-edge 0 0 0)
+
+; /////////////////////////////////////////////////////
+; Send Message Flame Span
+; /////////////////////////////////////////////////////
+(message-flame-span ${MessageFlameSpan})
+
+; /////////////////////////////////////////////////////
+; colormap
+; /////////////////////////////////////////////////////
+(colortable "INDARK")
+(colortable "NORMAL")
+(colortable-select "NORMAL")
+
+; /////////////////////////////////////////////////////
+; turns on motor power
+; /////////////////////////////////////////////////////
+(poweron)
+
+; monitor and log
+; /////////////////////////////////////////////////////
+(monitor ${Monitor})
+(gcd-monitor ${GCDMonitor})
+(debuglog ${DebugLog})
+(infolog ${InfoLog})
+(photointerval ${PhotoInterval})
+
+;
+; Targetted info log output can be specified by
+; infotarget.
+;
+; For example.
+; (infotarget LOG_NOTHING)
+; gives nothing results.
+; With (infolog #f), log out put will be temporary disabled
+; but you can re-enable log out put with (infolog #t) while 
+; infologtargets still be held.
+; 
+; (infotarget LOG_DEFAULT) 
+; gives no targetted form Log::info("log text") will be displayed
+;
+; you can also secify multiple log sources like
+;(infotarget LOG_DEFAULT LOG_ASURACORE LOG_BENCHMARK)
+; 
+;(debugtarget) also implemented
+
+(infotarget ${InfoTarget})
+
+(debugtarget ${DebugTarget})
+
+; default speed of ParaWalk
+; default is 30
+(set! pwalk-defaultspeed 30)
+
+; limitter od ParaWalk
+; default is 1.0
+; ex) limiter = 1.0 forward * 1.0, left * 1.0, turnCCW * 1.0
+;     limiter = 0.8 forward * 0.8, left * 0.8, turnCCW * 0.8
+;     limiter = 0.5 forward * 0.5, left * 0.5, turnCCW * 0.5
+(set! pwalk-limiter 1.0)
+
+; ball hold time for dribble 
+; default frame count is 3
+(set! dribble-hold-time 1)
+
+;
+; getBodyTilt offset in ParaWalk.cc
+; default offset is 0.0 degree
+;
+(set! pwalk-get-bodytilt-offset ${PWalkGetBodyTiltOffset})
+
+
+

@@ -1,0 +1,7 @@
+LIBRARY	ifyuvpnm
+EXPORTS
+	GetPluginInfo
+	IsSupported
+	GetPictureInfo
+	GetPicture
+	GetPreview

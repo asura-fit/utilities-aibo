@@ -1,0 +1,70 @@
+# AUTOEXEC.SCM, HOSTGW.CNF などの設定ファイルを生成する
+# ための設定ファイル
+
+# "#" から始まる行はコメントとして処理される
+
+# 無線 LAN に関する設定 (WLANCONF.TXT と AUTOEXEC.SCM の一部に利用)
+Network		= 192.168.60.0
+NetMask		= 255.255.0.0
+ESSID		= 4L_A_CH6
+WEPENABLE	= 1
+WEPKEY		= aibo0
+APMODE		= 1
+CHANNEL		= 6
+
+# カメラパラメタ
+# ホワイトバランス (FL, OUTDOOR, INDOOR から選択)
+WhiteBalance	= FL
+# ゲイン (LOW, MID, HIGH から選択)
+Gain		= HIGH
+# シャッタースピード (SLOW, MID, FAST から選択)
+ShutterSpeed	= FAST
+
+# GCD を切り替える時の effective tilt 角を指定(下が+)
+GCDThreshold	= 30
+
+# Message を送る間隔を指定
+MessageFlameSpan = 2
+
+# 役割と IP アドレスのマッピング(下のコメントにある通り、変更される可能性あり)
+Striker		= 72
+Libero		= 73
+Defender	= 74
+Goalie		= 71
+
+# 写真を送るフレーム間隔
+PhotoInterval   = 0
+
+# 機体ごとの設定ってどうしよう？
+# たとえば、 striker に関しては monitor を ON にしておきたいとか...
+# 可読性を保証した上でのパターンとしては
+# Striker {
+#	Monitor = true
+#	InfoLog = false
+#	IP	= 60
+#	DebugLog= false
+# }
+# という感じの記述を用意するはずなんだけど、
+# この形にするとパーザを書くのが面倒。
+#
+# ということで、希望があれば善処します。
+
+Monitor = true
+GCDMonitor = true
+InfoLog = true
+DebugLog= true
+InfoTarget=LOG_DEFAULT
+DebugTarget=LOG_DEFAULT
+
+VCBeaconDistCalib = 2640.0
+VCGoalDistCalib1 = 6575.0
+VCGoalDistCalib2 = 0.0
+VCBallDistCalib1 = 1510.0
+VCBallDistCalib2 = 0.0
+VCTiltOffsetCalib = 15.0
+
+# 水平線の調整
+# ParaWalkにおけるgetBodyTilt()が返す値を調整するための変数
+# 調整が足りないと、マーカやボールが見えなくなる
+# デフォルト 0.0度 水平線上方向が+
+PWalkGetBodyTiltOffset = -2.0
